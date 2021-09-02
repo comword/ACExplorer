@@ -132,3 +132,4 @@ config.json
 tests/game_paths.json
 tests/error_format
 pyUbiForge2/games
+.vscode/

@@ -18,8 +18,12 @@ from pyUbiForge.misc.config import CONFIG
 from pyUbiForge.misc.tempFiles2 import temp_files
 from pyUbiForge.misc.file_readers import file_reader_handler
 from pyUbiForge import ACU
+from pyUbiForge import R6S
 
-games = {"ACU": ACU}
+games = {
+    'R6S': R6S,
+    'ACU': ACU
+}
 game_functions = None
 forge_files: Dict[str, BaseForge] = {}
 read_file: file_reader_handler = file_reader_handler
@@ -31,7 +35,7 @@ def game_identifier() -> Union[str, None]:
     Returns None if load_game has not been called.
     """
     if game_functions is not None:
-        if hasattr(game_functions, "game_identifier"):
+        if hasattr(game_functions, 'game_identifier'):
             return game_functions.game_identifier
         else:
             raise AttributeError
@@ -52,24 +56,23 @@ def load_game(game_identifier_: str):
     """
     global game_functions
     global forge_files
-    logging.info(f"Loading Game Files for {game_identifier_}")
+    logging.info(f'Loading Game Files for {game_identifier_}')
     temp_files.clear()
     if game_identifier_ in games:
         game_functions = games.get(game_identifier_)
         forge_files = {}
         if os.path.isdir(CONFIG.game_folder(game_identifier_)):
             for forge_file_name in os.listdir(CONFIG.game_folder(game_identifier_)):
-                if forge_file_name.endswith(".forge"):
+                if forge_file_name.endswith('.forge'):
                     forge_files[forge_file_name] = game_functions.forge.Forge(
-                        os.path.join(
-                            CONFIG.game_folder(game_identifier_), forge_file_name
-                        ),
-                        forge_file_name,
+                        os.path.join(CONFIG.game_folder(
+                            game_identifier_), forge_file_name),
+                        forge_file_name
                     )
                     yield forge_file_name
 
         temp_files.load()
-    logging.info("Finished Loading Game Files")
+    logging.info('Finished Loading Game Files')
 
 
 def save():

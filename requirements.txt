@@ -1,3 +1,4 @@
 -r pyUbiForge2/requirements.txt
 pyside2>=5.0
 Pillow
+zstandard
